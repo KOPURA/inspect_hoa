@@ -3,17 +3,17 @@ from models.hoa import HOA
 
 
 def get_hoas():
-    f = open("../data/hoas.json")
-    data = json.load(f)
-    return data
+    with open("../data/hoas.json") as f:
+        return json.load(f)
 
 
-def add_user(hoa: HOA):
-    f = open("../data/hoas.json")
-    data = json.load(f)
-    f.close()
-
-    hoa_json = json.loads(json.dumps(hoa.__dict__))
-    data.append(hoa_json)
-    with open("../data/hoas.json", 'w') as f:
+def add_hoa(hoa: HOA):
+    # The following approach might be a little ugly, but
+    # allows us to do the whole "operation" within a single
+    # file open.
+    with open("../data/hoas.json", "r+") as f:
+        data = json.load(f)
+        f.seek(0)
+        data.append(hoa.serialize())
         json.dump(data, f)
+        f.truncate()

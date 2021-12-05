@@ -2,11 +2,9 @@ import json
 from models.user import User
 
 
-
 def get_users():
-    f = open("../data/users.json")
-    data = json.load(f)
-    return data
+    with open("../data/users.json") as f:
+        return json.load(f)
 
 
 def add_user(user: User):
